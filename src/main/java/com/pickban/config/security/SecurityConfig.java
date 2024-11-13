@@ -91,7 +91,7 @@ public class SecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable);
         http
                 .authorizeHttpRequests((auth) -> auth.requestMatchers(
-                        "/api/leagues/**","/api/auth/**").permitAll()
+                        "/api/leagues/**","/api/auth/**", "/api/users", "/api/users/**").permitAll()
                         .anyRequest().authenticated());
         http
                 .exceptionHandling(exceptionHandling -> exceptionHandling
