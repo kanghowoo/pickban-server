@@ -22,19 +22,18 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private static final String TOKEN_RESPONSE_HEADER_NAME = ApiHeader.AUTH_TOKEN.getName();
+    private static final String REFRESH_TOKEN_RESPONSE_HEADER_NAME =
+            ApiHeader.REFRESH_TOKEN.getName();
     private final JWTUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
-    private final CookieService cookieService;
     private final ObjectMapper objectMapper;
 
     @Autowired
     public UserAuthenticationSuccessHandler(JWTUtil jwtUtil,
                                             RefreshTokenService refreshTokenService,
-                                            CookieService cookieService,
                                             ObjectMapper objectMapper) {
         this.jwtUtil = jwtUtil;
         this.refreshTokenService = refreshTokenService;
-        this.cookieService = cookieService;
         this.objectMapper = objectMapper;
     }
 
@@ -50,7 +49,7 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
         LoginResponse loginResponse = new LoginResponse(user.getId(), user.getNickname());
 
         response.setHeader(TOKEN_RESPONSE_HEADER_NAME, typeSpecifiedToken);
-        response.addCookie(cookieService.generateRefreshTokenCookie(refreshToken));
+        response.setHeader(REFRESH_TOKEN_RESPONSE_HEADER_NAME, refreshToken.getToken());
         response.getWriter().write(objectMapper.writeValueAsString(loginResponse));
 
     }
