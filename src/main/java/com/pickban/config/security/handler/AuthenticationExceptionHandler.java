@@ -27,16 +27,6 @@ public class AuthenticationExceptionHandler extends BaseExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     protected ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e)
             throws AccessDeniedException {
-
-        /*
-         * Spring security에서 @PreAuthorized 어노테이션을 통과하지 못하면,
-         * AccessDeniedException이 발생한다. spring security의 java config에서
-         * hasAuthorized 메소드로 접근권한을 설정하면 AccessDeniedHandler 구현체를 통해
-         * AccessDeniedException을 핸들링할 수 있지만, @PreAuthorized 어노테이션을 통해서는
-         * AccessDeniedHandler 구현체로 핸들링이 불가능하다. 이를 극복하기 위해,
-         * GlobalExceptionHandler에서 AccessDeniedException을 처리하는 로직에서 다시
-         * 예외를 밖으로 던짐으로써 AccessDeniedHandler 구현체로 핸들링 할 수 있도록 처리한다.
-         */
         throw e;
     }
 

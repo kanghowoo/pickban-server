@@ -1,22 +1,27 @@
 package com.pickban.common.error.exception;
 
 import com.pickban.common.error.ErrorCode;
+import com.pickban.common.response.Alert;
 
 import lombok.Getter;
 
 @Getter
 public class BusinessException extends RuntimeException {
     private final ErrorCode errorCode;
-
-    public BusinessException(String message, ErrorCode errorCode) {
-        super(message);
-        this.errorCode = errorCode;
-    }
+    private final Alert alert;
 
     public BusinessException(ErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.errorCode = errorCode;
+        this(errorCode.getMessage(), errorCode, null);
     }
 
+    public BusinessException(String message, ErrorCode errorCode) {
+        this(message, errorCode, null);
+    }
+
+    public BusinessException(String message, ErrorCode errorCode, Alert alert) {
+        super(message);
+        this.errorCode = errorCode;
+        this.alert = alert;
+    }
 
 }
