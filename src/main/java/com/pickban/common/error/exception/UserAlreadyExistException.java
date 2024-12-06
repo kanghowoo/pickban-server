@@ -4,6 +4,7 @@ import com.pickban.common.error.ErrorCode;
 
 public class UserAlreadyExistException extends BusinessException {
     public UserAlreadyExistException(ErrorCode errorCode) {
-        super(errorCode);
+        super(errorCode.getMessage(), errorCode);
     }
+
 }
