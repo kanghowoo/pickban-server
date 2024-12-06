@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pickban.common.error.ErrorCode;
 import com.pickban.common.error.exception.MailSendException;
+import com.pickban.common.error.exception.UserEmailSendRateLimitException;
 import com.pickban.entity.MailQuota;
 import com.pickban.repository.MailQuotaStorage;
 
@@ -27,7 +28,7 @@ public class MailQuotaService {
         LocalDateTime createdAt = LocalDateTime.now();
 
         if (!canSendEmail(email, createdAt)) {
-            throw new MailSendException(ErrorCode.USER_EMAIL_SEND_RATE_LIMITED);
+            throw new UserEmailSendRateLimitException(ErrorCode.USER_EMAIL_SEND_RATE_LIMITED);
         }
 
         mailQuotaStorage.recordQuotaUsage(new MailQuota(email, createdAt));

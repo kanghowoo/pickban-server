@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이메일 주소 인증</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      text-align: left;
+      padding: 20px 0;
+    }
+    .header img {
+      height: 30px;
+    }
+    .content {
+      text-align: center;
+    }
+    .content h1 {
+      font-size: 24px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .content p {
+      font-size: 16px;
+      color: #333333;
+    }
+    .email-address {
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      background-color: #f5f5f5;
+      padding: 10px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    .button {
+      display: inline-block;
+      padding: 15px 30px;
+      background-color: #333333;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    a.button {
+      color: white;              /* 텍스트 색상을 흰색으로 */
+      text-decoration: none;     /* 밑줄 제거 */
+    }
+    a.button:hover {
+      color: white;              /* hover 시에도 흰색 유지 */
+    }
+    .footer {
+      font-size: 14px;
+      color: #999999;
+      margin-top: 40px;
+      text-align: center;
+    }
+    .footer a {
+      color: #999999;
+      text-decoration: none;
+    }
+    .verification-link {
+      text-decoration: none;
+      font-size: 13px;
+      color: #666666;
+      word-break: break-all;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="email-container">
+  <div class="header">
+    <h1>My BanPick</h1>
+  </div>
+  <div class="content">
+    <h1>인증 메일</h1>
+    <p>My BanPick 이용을 위해 이메일 주소 인증을 요청하셨습니다.<br> 아래 버튼을 클릭하여 이메일 주소 인증을 완료하시면, 서비스를 이용하실 수 있습니다.</p>
+<!--    <div id="email" class="email-address">-->
+<!--    </div>-->
+    <a id ="authUrl" href="#" class="button">이메일 주소를 인증합니다</a>
+    <p class="footer">인증메일은 <strong>1시간 이내</strong> 완료해주세요.</p>
+  </div>
+  <div class="verification-link">
+    <p>버튼이 정상적으로 클릭되지 않는다면, 아래 링크를 복사하여 접속해 주세요:</p>
+    <div id="authUrlText">
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
