@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.TOO_MANY_REQUESTS;
 @Getter
 public enum ErrorCode {
     /** common errors **/
-    ENTITY_NOT_FOUND("C001", "entity not found", NOT_FOUND),
+    ENTITY_NOT_FOUND("C002", "entity not found", NOT_FOUND),
 
     /** auth errors **/
     NEED_AUTHENTICATION("AU001", "need authentication", UNAUTHORIZED),
