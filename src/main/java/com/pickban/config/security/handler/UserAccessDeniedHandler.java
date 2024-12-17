@@ -38,7 +38,7 @@ public class UserAccessDeniedHandler implements AccessDeniedHandler {
         RuntimeException exception;
 
         if (!user.isVerified()) {
-            exception = new UserNotVerifiedException(ErrorCode.NEED_AUTHENTICATION);
+            exception = new UserNotVerifiedException(ErrorCode.NOT_VERIFIED_USER);
         } else {
             exception = new AuthorizationFailedException(ErrorCode.AUTHORIZATION_FAILED);
         }

@@ -46,7 +46,8 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
         String token = jwtUtil.createJwt(user.getId());
         String typeSpecifiedToken = jwtUtil.specifyType(token);
 
-        LoginResponse loginResponse = new LoginResponse(user.getId(), user.getNickname());
+        LoginResponse loginResponse = new LoginResponse(
+                user.getId(), user.getNickname(), user.getEmail());
 
         response.setHeader(TOKEN_RESPONSE_HEADER_NAME, typeSpecifiedToken);
         response.setHeader(REFRESH_TOKEN_RESPONSE_HEADER_NAME, refreshToken.getToken());

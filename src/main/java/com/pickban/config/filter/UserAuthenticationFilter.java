@@ -1,4 +1,4 @@
-package com.pickban.config.security.filter;
+package com.pickban.config.filter;
 
 import java.io.IOException;
 import java.util.Map;
@@ -65,11 +65,6 @@ public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilt
 
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(email, password, null);
-//
-//            Authentication authentication =
-//                    this.getAuthenticationManager().authenticate(authenticationToken);
-
-            //SecurityContextHolder.getContext().setAuthentication(authentication);
 
             return authenticationManager.authenticate(authenticationToken);
         } catch (IOException e) {
