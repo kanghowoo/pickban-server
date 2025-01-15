@@ -23,6 +23,10 @@ public class GoogleMailService implements MailService {
 
     @Value("${spring.mail.username}")
     private String mailUsername;
+
+    @Value("${url.verifyUrl}")
+    private String verifyUrl;
+
     private static final String VERIFICATION_MAIL_TITLE= "My BanPick 인증 메일입니다.";
     private static final String PASSWORD_RESET_MAIL_TITLE = "My BanPick 비밀번호 재설정 안내 메일입니다.";
 
@@ -98,9 +102,9 @@ public class GoogleMailService implements MailService {
 
     private String getVerifyUrl(String email, String token) {
         log.info("set url : {}",
-                 String.format("http://localhost:4200/auth/verify?email=%s&token=%s", email, token));
-        return String.format("http://localhost:4200/auth/verify?email=%s&token=%s", email, token);
-        //return String.format("'https://mybanpick.kr/auth/verify?email=%s&token=%s'", email, token);
+                 String.format(verifyUrl, email, token));
+        return String.format(verifyUrl, email, token);
+
     }
 
 }
