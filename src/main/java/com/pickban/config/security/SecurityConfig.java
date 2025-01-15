@@ -4,16 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AnonymousConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
-import org.springframework.security.config.annotation.web.configurers.SecurityContextConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,11 +22,10 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pickban.config.security.filter.TokenAuthenticationFilter;
-import com.pickban.config.security.filter.UserAuthenticationFilter;
+import com.pickban.config.filter.TokenAuthenticationFilter;
+import com.pickban.config.filter.UserAuthenticationFilter;
 import com.pickban.service.CustomUserDetailsService;
 import com.pickban.util.JWTUtil;
 
@@ -73,7 +69,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(customUserDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
@@ -91,7 +87,9 @@ public class SecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable);
         http
                 .authorizeHttpRequests((auth) -> auth.requestMatchers(
-                        "/api/leagues/**","/api/auth/**", "/api/users", "/api/users/**").permitAll()
+                        "/api/leagues/**","/api/auth/**",
+                        "/api/users/**",
+                        "/api/matches/**").permitAll()
                         .anyRequest().authenticated());
         http
                 .exceptionHandling(exceptionHandling -> exceptionHandling
