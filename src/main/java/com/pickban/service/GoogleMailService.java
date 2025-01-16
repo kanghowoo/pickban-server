@@ -24,7 +24,7 @@ public class GoogleMailService implements MailService {
     @Value("${spring.mail.username}")
     private String mailUsername;
 
-    @Value("${url.verifyUrl}")
+    @Value("${verify-url}")
     private String verifyUrl;
 
     private static final String VERIFICATION_MAIL_TITLE= "My BanPick 인증 메일입니다.";
