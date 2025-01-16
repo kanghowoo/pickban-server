@@ -57,7 +57,5 @@ tasks.named('test') {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	scanForTestClasses = false
-	include "**/**Test.class"
 	options.compilerArgs << "-parameters"
 }
