@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pickban.entity.User;
 import com.pickban.util.JWTUtil;
 
 import jakarta.servlet.FilterChain;
@@ -25,18 +24,16 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class UserAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private final JWTUtil jwtUtil;
     private final ObjectMapper objectMapper;
     private final AuthenticationManager authenticationManager;
     private final AuthenticationFailureHandler authenticationFailureHandler;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
-    public UserAuthenticationFilter(JWTUtil jwtUtil,
+    public UserAuthenticationFilter(
                                     ObjectMapper objectMapper,
                                     AuthenticationManager authenticationManager,
                                     AuthenticationSuccessHandler authenticationSuccessHandler,
                                     AuthenticationFailureHandler authenticationFailureHandler) {
-        this.jwtUtil = jwtUtil;
         this.objectMapper = objectMapper;
         this.authenticationManager = authenticationManager;
         this.authenticationFailureHandler = authenticationFailureHandler;

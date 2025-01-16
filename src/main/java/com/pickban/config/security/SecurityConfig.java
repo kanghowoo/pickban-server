@@ -112,8 +112,7 @@ public class SecurityConfig {
             AuthenticationManager authenticationManager) throws Exception {
 
         UserAuthenticationFilter filter =
-                new UserAuthenticationFilter(jwtUtil,
-                                             objectMapper,
+                new UserAuthenticationFilter(objectMapper,
                                              authenticationManager,
                                              authenticationSuccessHandler,
                                              authenticationFailureHandler);
