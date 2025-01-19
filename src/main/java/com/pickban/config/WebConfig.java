@@ -29,7 +29,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:4200", "http://localhost:8080",
-                                "https://d2x9irjf1wenrr.cloudfront.net")
+                                "https://d2x9irjf1wenrr.cloudfront.net",
+                                "https://api.mybanpick.kr")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("Authorization", "Content-Type")
                 .allowCredentials(true);
