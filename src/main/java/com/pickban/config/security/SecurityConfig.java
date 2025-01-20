@@ -1,5 +1,7 @@
 package com.pickban.config.security;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +24,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pickban.config.filter.TokenAuthenticationFilter;
@@ -80,6 +85,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+        http
                 .csrf(CsrfConfigurer::disable);
         http
                 .formLogin(FormLoginConfigurer::disable);
@@ -87,6 +94,7 @@ public class SecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable);
         http
                 .authorizeHttpRequests((auth) -> auth.requestMatchers(
+                        "/health",
                         "/api/leagues/**","/api/auth/**",
                         "/api/users/**",
                         "/api/matches/**").permitAll()
@@ -98,14 +106,29 @@ public class SecurityConfig {
 
         http
                 .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(userAuthenticationFilter(
-                                        authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))),
-                                TokenAuthenticationFilter.class);
+                .addFilter(userAuthenticationFilter(
+                                        authenticationManager(
+                                                http.getSharedObject(AuthenticationConfiguration.class))));
         http
                 .sessionManagement(configurer -> configurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("https://mybanpick.kr",
+                                                      "https://api.mybanpick.kr",
+                                                      ""));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     private UserAuthenticationFilter userAuthenticationFilter(
