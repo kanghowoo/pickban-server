@@ -25,16 +25,6 @@ public class WebConfig implements WebMvcConfigurer {
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:4200",
-                                "https://d2x9irjf1wenrr.cloudfront.net",
-                                "https://mybanpick.kr")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("Authorization", "Content-Type")
-                .allowCredentials(false);
-    }
 
     @Bean
     public FilterRegistrationBean<ExceptionHandlerFilter> exceptionHandlerFilter() {
