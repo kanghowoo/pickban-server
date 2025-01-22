@@ -40,7 +40,7 @@ dependencies {
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
 	implementation 'org.jsoup:jsoup:1.18.1'
 	implementation 'org.mapstruct:mapstruct:1.6.3'
-	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 
 
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
