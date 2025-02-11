@@ -124,7 +124,8 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of("http://localhost:4200",
                                          "https://www.mybanpick.kr","https://mybanpick.kr"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "refreshToken"));
+        config.setExposedHeaders(List.of("Authorization", "Content-Type", "refreshToken"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
