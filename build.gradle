@@ -1,13 +1,17 @@
-buildscript {
-	ext {
-		queryDslVersion = "5.0.0"
-	}
-}
-
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.3.2'
+	id 'org.springframework.boot' version '3.5.4'
 	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+ext {
+	queryDslVersion = '5.0.0'
+	lombokVersion = '1.18.32'
+	jjwtVersion = '0.12.3'
+	mysqlVersion = '8.4.0'
+	jsoupVersion = '1.18.1'
+	mapstructVersion = '1.6.3'
+	jasyptVersion = '3.0.5'
 }
 
 group = 'com'
@@ -24,29 +28,40 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web:3.3.2'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.3.2'
-	implementation 'org.springframework.boot:spring-boot-starter-security:3.3.2'
-	implementation 'org.projectlombok:lombok:1.18.32'
-	annotationProcessor 'org.projectlombok:lombok:1.18.32'
-	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-	implementation 'org.springframework.boot:spring-boot-starter-validation:3.3.2'
-	implementation 'com.mysql:mysql-connector-j:8.4.0'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
-	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
-	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Lombok
+	implementation "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+	// JWT
+	implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+	implementation "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+	implementation "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
+
+	// DB 및 기타
+	implementation "com.mysql:mysql-connector-j:${mysqlVersion}"
+	implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:${jasyptVersion}"
+	implementation "org.jsoup:jsoup:${jsoupVersion}"
+
+	// QueryDSL
 	implementation "com.querydsl:querydsl-core:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
-	implementation 'org.jsoup:jsoup:1.18.1'
-	implementation 'org.mapstruct:mapstruct:1.6.3'
-	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
-
-
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta"
-	annotationProcessor	"jakarta.persistence:jakarta.persistence-api:3.1.0"
-	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.3.2'
+
+	// MapStruct
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+	// 기타 annotationProcessor
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api:3.1.0"
+
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
