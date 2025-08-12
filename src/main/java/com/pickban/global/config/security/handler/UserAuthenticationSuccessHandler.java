@@ -13,7 +13,7 @@ import com.pickban.domain.auth.controller.dto.LoginResponse;
 import com.pickban.domain.auth.domain.model.RefreshToken;
 import com.pickban.domain.user.domain.model.User;
 import com.pickban.domain.auth.service.RefreshTokenService;
-import com.pickban.global.util.JWTUtil;
+import com.pickban.global.config.token.JWTUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

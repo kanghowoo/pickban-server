@@ -11,7 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.pickban.global.web.dto.ApiHeader;
 import com.pickban.domain.user.domain.model.User;
 import com.pickban.domain.user.service.CustomUserDetailsService;
-import com.pickban.global.util.JWTUtil;
+import com.pickban.global.config.token.JWTUtil;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

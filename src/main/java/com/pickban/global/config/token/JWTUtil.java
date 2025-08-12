@@ -1,4 +1,4 @@
-package com.pickban.global.util;
+package com.pickban.global.config.token;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -8,8 +8,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.pickban.global.config.token.JwtProperties;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pickban.domain.user.domain.model.User;
-import com.pickban.global.util.JWTUtil;
+import com.pickban.global.config.token.JWTUtil;
 import com.pickban.domain.user.service.CustomUserDetailsService;
 
 @Service
