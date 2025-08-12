@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-import com.pickban.config.token.JwtProperties;
+import com.pickban.global.config.token.JwtProperties;
 
 import jakarta.annotation.PostConstruct;
 
