@@ -4,14 +4,12 @@ import java.util.TimeZone;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-
-import com.pickban.global.config.token.JwtProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 import jakarta.annotation.PostConstruct;
 
 @SpringBootApplication
-@EnableConfigurationProperties(JwtProperties.class)
+@ConfigurationPropertiesScan
 public class PickbanApplication {
 
 	@PostConstruct

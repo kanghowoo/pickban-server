@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,7 +22,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
@@ -31,10 +30,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pickban.domain.user.service.CustomUserDetailsService;
 import com.pickban.global.config.filter.TokenAuthenticationFilter;
 import com.pickban.global.config.filter.UserAuthenticationFilter;
-import com.pickban.domain.user.service.CustomUserDetailsService;
-import com.pickban.global.util.JWTUtil;
+import com.pickban.global.config.token.JWTUtil;
 
 @Configuration
 @EnableWebSecurity
@@ -76,15 +75,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(customUserDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
-
-        return provider;
-    }
-
-    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> corsConfigurationSource());
@@ -95,12 +85,14 @@ public class SecurityConfig {
         http
                 .httpBasic(HttpBasicConfigurer::disable);
         http
+                .userDetailsService(customUserDetailsService);
+        http
                 .authorizeHttpRequests((auth) -> auth.requestMatchers(
-                        "/health",
-                        "/api/leagues/**","/api/auth/**",
-                        "/api/users/**",
-                        "/api/matches/**").permitAll()
-                        .anyRequest().authenticated());
+                                                             "/health",
+                                                             "/api/leagues/**", "/api/auth/**",
+                                                             "/api/users/**",
+                                                             "/api/matches/**").permitAll()
+                                                     .anyRequest().authenticated());
         http
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(authenticationEntryPoint)
@@ -109,8 +101,8 @@ public class SecurityConfig {
         http
                 .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilter(userAuthenticationFilter(
-                                        authenticationManager(
-                                                http.getSharedObject(AuthenticationConfiguration.class))));
+                        authenticationManager(
+                                http.getSharedObject(AuthenticationConfiguration.class))));
         http
                 .sessionManagement(configurer -> configurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -122,7 +114,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:4200",
-                                         "https://www.mybanpick.kr","https://mybanpick.kr"));
+                                         "https://www.mybanpick.kr", "https://mybanpick.kr"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "refreshToken"));
         config.setExposedHeaders(List.of("Authorization", "Content-Type", "refreshToken"));
@@ -134,18 +126,23 @@ public class SecurityConfig {
     }
 
     private UserAuthenticationFilter userAuthenticationFilter(
-            AuthenticationManager authenticationManager) throws Exception {
-
-        RequestMatcher loginRequestMatcher = new OrRequestMatcher(
-                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/auth/login")
-        );
+            AuthenticationManager authenticationManager) {
 
         UserAuthenticationFilter filter =
-                new UserAuthenticationFilter(loginRequestMatcher,
+                new UserAuthenticationFilter(
                                              objectMapper,
                                              authenticationManager,
                                              authenticationSuccessHandler,
                                              authenticationFailureHandler);
+
+        RequestMatcher loginRequestMatcher = new OrRequestMatcher(
+                PathPatternRequestMatcher
+                        .withDefaults()
+                        .matcher(HttpMethod.POST, "/api/auth/login")
+        );
+
+        filter.setFilterProcessesUrl("/api/auth/login");
+        filter.setRequiresAuthenticationRequestMatcher(loginRequestMatcher);
 
         return filter;
     }
