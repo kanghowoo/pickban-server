@@ -1,6 +1,7 @@
-package com.pickban.global.error.exception;
+package com.pickban.domain.auth.exception;
 
 import com.pickban.global.error.ErrorCode;
+import com.pickban.global.error.exception.BusinessException;
 
 public class ExpiredRefreshTokenException extends BusinessException {
     public ExpiredRefreshTokenException(ErrorCode errorCode) {

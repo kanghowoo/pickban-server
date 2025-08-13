@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.pickban.global.error.ErrorCode;
-import com.pickban.global.error.exception.UserEmailSendRateLimitException;
+import com.pickban.domain.mail.exception.UserEmailSendRateLimitException;
 import com.pickban.domain.mail.domain.model.MailQuota;
 import com.pickban.domain.mail.domain.repository.MailQuotaStorage;
 

@@ -1,6 +1,7 @@
-package com.pickban.global.error.exception;
+package com.pickban.domain.mail.exception;
 
 import com.pickban.global.error.ErrorCode;
+import com.pickban.global.error.exception.BusinessException;
 import com.pickban.global.web.dto.Alert;
 
 public class UserEmailSendRateLimitException extends BusinessException {

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pickban.global.error.exception.MailSendException;
+import com.pickban.domain.mail.exception.MailSendException;
 import com.pickban.domain.user.controller.dto.CreateUserRequest;
 import com.pickban.domain.user.controller.dto.UserApiShowResponse;
 import com.pickban.domain.user.controller.dto.UserPasswordResetMailSendRequest;

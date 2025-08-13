@@ -1,8 +1,9 @@
-package com.pickban.global.error.exception;
+package com.pickban.domain.mail.exception;
 
 import com.pickban.global.error.ErrorCode;
+import com.pickban.global.error.exception.BusinessException;
 
-public class MailSendException extends BusinessException{
+public class MailSendException extends BusinessException {
     public MailSendException(ErrorCode errorCode) {
         super(errorCode);
     }

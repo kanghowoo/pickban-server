@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pickban.global.error.ErrorCode;
-import com.pickban.global.error.exception.UserAlreadyExistException;
+import com.pickban.domain.user.exception.UserAlreadyExistException;
 import com.pickban.domain.user.controller.dto.CreateUserRequest;
 import com.pickban.domain.user.domain.model.User;
 import com.pickban.domain.user.domain.repository.UserRepository;

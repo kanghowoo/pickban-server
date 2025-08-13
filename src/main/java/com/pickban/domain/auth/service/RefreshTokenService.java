@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pickban.global.error.exception.ExpiredRefreshTokenException;
-import com.pickban.global.error.exception.RefreshTokenSignatureException;
+import com.pickban.domain.auth.exception.ExpiredRefreshTokenException;
+import com.pickban.domain.auth.exception.RefreshTokenSignatureException;
 import com.pickban.domain.auth.domain.model.RefreshToken;
 import com.pickban.domain.user.domain.model.User;
 import com.pickban.domain.auth.domain.repository.RefreshTokenRepository;
