@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 permissions:
-  id-token: write
+  id-token: write # OIDC 인증을 위해 필수
   contents: read
 
 jobs:
@@ -20,6 +20,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      
+      - name: Gradle 빌드
+        run: |
+          chmod +x gradlew
+          ./gradlew bootJar -x test
 
       - name: AWS 권한 가져오기 (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
@@ -27,5 +32,35 @@ jobs:
           role-to-assume: arn:aws:iam::902878533887:role/GitHubActions-Deploy-Role
           aws-region: ap-northeast-2
 
-      - name: AWS 연결 테스트
-        run: aws sts get-caller-identity
+      - name: Amazon ECR 로그인
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Docker 이미지 빌드 및 ECR 푸시
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: pickban-server
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: EC2 배포 수행
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+            
+            docker pull ${{ steps.login-ecr.outputs.registry }}/pickban-server:latest
+            
+            # 컨테이너 재시작 (docker-compose가 있는 경로로 이동 필수)
+            cd /home/ec2-user/app
+            
+            docker-compose down
+            docker-compose up -d
+            
+            # 미사용 이미지 정리
+            docker image prune -f
