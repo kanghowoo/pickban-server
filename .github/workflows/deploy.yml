@@ -1,0 +1,31 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 소스 코드 가져오기
+        uses: actions/checkout@v4
+
+      - name: JDK 17 설정
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: AWS 권한 가져오기 (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::902878533887:role/GitHubActions-Deploy-Role
+          aws-region: ap-northeast-2
+
+      - name: AWS 연결 테스트
+        run: aws sts get-caller-identity
