@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # 1. Database Service
+  mysql-db:
+    image: mysql:8.0
+    container_name: pickban-db
+    restart: always
+    env_file:
+      - .env # .env 파일 로드
+    environment:
+      # .env의 값을 MySQL 컨테이너 환경변수로 매핑
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db_data:/var/lib/mysql # 데이터 영구 저장
+    networks:
+      - app-network
+
+  # 2. Application Service
+  spring-app:
+    # GitHub Actions에서 빌드한 이미지 이름 (본인 ID로 수정 필수)
+    image: ${ECR_IMAGE_URI}
+    container_name: pickban-app
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - mysql-db
+    ports:
+      - "8080:8080"
+    environment:
+      # [핵심] prod 프로필 활성화 -> application-prod.yml 사용
+      SPRING_PROFILES_ACTIVE: prod
+
+      # application.yml, prod.yml 내의 ${...} 변수들에 값 주입
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

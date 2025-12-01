@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    # localhost -> mysql-db (docker-compose 서비스명)
+    url: jdbc:mysql://mysql-db:3306/pickban_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+verify-url: "https://www.mybanpick.kr/api/auth/verify?email=%s&token=%s"
+
+server:
+  servlet:
+    session:
+      cookie:
+        secure: false # 필요하다면 true로 변경 (SSL 적용 시)
