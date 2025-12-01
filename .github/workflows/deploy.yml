@@ -68,6 +68,9 @@ jobs:
             # 컨테이너 재시작 (docker-compose가 있는 경로로 이동 필수)
             cd /home/ec2-user/pickban-server
             
+            # GitHub Secrets에 저장된 .env 내용을 파일로 생성
+            echo "${{ secrets.ENV_FILE }}" > .env
+            
             docker-compose down
             docker-compose up -d
             
