@@ -52,7 +52,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_KEY }}
           source: "docker-compose.yml"     # GitHub에 있는 파일
-          target: "/home/ec2-user/pickban-server/" # EC2의 목적지 폴더    
+          target: "/home/ec2-user/app/" # EC2의 목적지 폴더    
 
       - name: EC2 배포 수행
         uses: appleboy/ssh-action@master
