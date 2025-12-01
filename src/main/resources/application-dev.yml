@@ -8,7 +8,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 
 verify-url: "http://localhost:4200/auth/verify?email=%s&token=%s"
 
