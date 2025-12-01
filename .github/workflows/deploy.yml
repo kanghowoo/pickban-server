@@ -52,7 +52,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_KEY }}
           source: "docker-compose.yml"     # GitHub에 있는 파일
-          target: "/home/ec2-user/app/" # EC2의 목적지 폴더    
+          target: "/home/ec2-user/pickban-server/" # EC2의 목적지 폴더    
 
       - name: EC2 배포 수행
         uses: appleboy/ssh-action@master
@@ -66,7 +66,7 @@ jobs:
             docker pull ${{ steps.login-ecr.outputs.registry }}/pickban-server:latest
             
             # 컨테이너 재시작 (docker-compose가 있는 경로로 이동 필수)
-            cd /home/ec2-user/app
+            cd /home/ec2-user/pickban-server
             
             docker-compose down
             docker-compose up -d
