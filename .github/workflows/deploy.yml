@@ -20,7 +20,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      
+
       - name: Gradle 빌드
         run: |
           chmod +x gradlew
@@ -45,14 +45,24 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
+      - name: GitHub Actions IP로 보안그룹 22번 포트 열기
+        run: |
+          RUNNER_IP=$(curl -s https://checkip.amazonaws.com)
+          echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
+          aws ec2 authorize-security-group-ingress \
+            --group-id ${{ secrets.EC2_SG_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${RUNNER_IP}/32
+
       - name: Copy Docker Compose file to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_KEY }}
-          source: "docker-compose.yml"     # GitHub에 있는 파일
-          target: "/home/ec2-user/pickban-server/" # EC2의 목적지 폴더
+          source: "docker-compose.yml"
+          target: "/home/ec2-user/pickban-server/"
           overwrite: true
 
       - name: EC2 배포 수행
@@ -63,17 +73,23 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
-            
+
             docker pull ${{ steps.login-ecr.outputs.registry }}/pickban-server:latest
-            
-            # 컨테이너 재시작 (docker-compose가 있는 경로로 이동 필수)
+
             cd /home/ec2-user/pickban-server
-            
-            # GitHub Secrets에 저장된 .env 내용을 파일로 생성
+
             echo "${{ secrets.ENV_FILE }}" > .env
-            
+
             docker-compose down
             docker-compose up -d
-            
-            # 미사용 이미지 정리
+
             docker image prune -f
+
+      - name: 보안그룹 22번 포트 닫기
+        if: always()
+        run: |
+          aws ec2 revoke-security-group-ingress \
+            --group-id ${{ secrets.EC2_SG_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${RUNNER_IP}/32
